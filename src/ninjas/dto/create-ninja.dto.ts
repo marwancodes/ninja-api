@@ -1,4 +1,9 @@
+import { IsEnum, MinLength } from 'class-validator';
+
 export class CreateNinjaDto {
-  name: string;
-  weapon: 'shuriken' | 'katana' | 'sai' | 'nunchucks';
+  @MinLength(3)
+  name!: string;
+
+  @IsEnum(['shuriken', 'katana'], { message: 'Use correct weapon' })
+  weapon!: 'shuriken' | 'katana';
 }

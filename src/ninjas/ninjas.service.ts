@@ -1,17 +1,18 @@
 import { CreateNinjaDto } from './dto/create-ninja.dto';
 import { Injectable } from '@nestjs/common';
 import { UpdateNinjaDto } from './dto/update-ninja.dto';
+import { v4 as uuid } from 'uuid';
 
 @Injectable()
 export class NinjasService {
   private ninjas = [
-    { id: 1, name: 'Marwan', weapon: 'shuriken' },
-    { id: 2, name: 'Zayn', weapon: 'katana' },
-    { id: 3, name: 'Adam', weapon: 'sai' },
-    { id: 3, name: 'Roman', weapon: 'nunchucks' },
+    { id: '1', name: 'Marwan', weapon: 'shuriken' },
+    { id: '2', name: 'Zayn', weapon: 'katana' },
+    { id: '3', name: 'Adam', weapon: 'shuriken' },
+    { id: '4', name: 'Roman', weapon: 'katana' },
   ];
 
-  getNinjas(weapon?: 'shuriken' | 'katana' | 'sai' | 'nunchucks') {
+  getNinjas(weapon?: 'shuriken' | 'katana') {
     if (weapon) {
       return this.ninjas.filter((ninja) => ninja.weapon === weapon);
     }
@@ -19,7 +20,7 @@ export class NinjasService {
     return this.ninjas;
   }
 
-  getNinja(id: number) {
+  getNinja(id: string) {
     const ninja = this.ninjas.find((ninja) => ninja.id === id);
 
     if (!ninja) {
@@ -31,8 +32,8 @@ export class NinjasService {
 
   createNinja(createNinja: CreateNinjaDto) {
     const newNinja = {
+      id: uuid(),
       ...createNinja,
-      id: this.ninjas.length + 1,
     };
 
     this.ninjas.push(newNinja);
@@ -40,7 +41,7 @@ export class NinjasService {
     return newNinja;
   }
 
-  updateNinja(id: number, updateNinja: UpdateNinjaDto) {
+  updateNinja(id: string, updateNinja: UpdateNinjaDto) {
     this.ninjas = this.ninjas.map((ninja) => {
       if (ninja.id === id) {
         return {
@@ -55,7 +56,7 @@ export class NinjasService {
     return this.getNinja(id);
   }
 
-  removeNinja(id: number) {
+  removeNinja(id: string) {
     const toBeRemoved = this.getNinja(id);
 
     this.ninjas = this.ninjas.filter((ninja) => ninja.id !== id);
